@@ -4,8 +4,44 @@ Compiler and linker wrapper for late optional Alien utilization
 
 # SYNOPSIS
 
-    % perl -MAlien::Base::Wrapper=Alien::Foo,Alien::Bar -e cc -o foo.o -c foo.c
-    % perl -MAlien::Base::Wrapper=Alien::Foo,Alien::Bar -e ld -o foo foo.o
+From the command line:
+
+    % perl -MAlien::Base::Wrapper=Alien::Foo,Alien::Bar -e cc -- -o foo.o -c foo.c
+    % perl -MAlien::Base::Wrapper=Alien::Foo,Alien::Bar -e ld -- -o foo foo.o
+
+From Makefile.PL:
+
+    use Config;
+    use ExtUtils::MakeMaker 6.52;
+    
+    my $cc      = $Config{cc};
+    my $ld      = $Config{ld};
+    my $libs    = '';
+    my $ccflags = $Config{ccflags};
+    my $build_requires = { 'Alien::Libfoo' => 0 };
+    
+    system 'pkg-config', '--exists', 'libfoo';
+    if($? == 0)
+    {
+      $ccflags = `pkg-config --cflags libsfoo` . " $ccflags";
+      $libs    = `pkg-config --libs   libfoo`;
+      delete $build_requires{'Alien::Libfoo'};
+    }
+    else
+    {
+      $cc = '$(FULLPERL) -Iinc -MAlien::Base::Wrapper=Alien::Libfoo -e cc --';
+      $ld = '$(FULLPERL) -Iinc -MAlien::Base::Wrapper=Alien::Libfoo -e ld --';
+    }
+    
+    WriteMakefile(
+      NAME => 'Foo::XS',
+      BUILD_REQUIRES => $build_requires,
+      CC             => $cc,
+      LD             => $ld,
+      CCFLAGS        => $ccflags,
+      LIBS           => [ $libs ],
+      ...
+    );
 
 # DESCRIPTION
 
@@ -17,18 +53,20 @@ use of [Alien](https://metacpan.org/pod/Alien) modules by XS which cannot probe 
 Historically an XS module that wanted to use an [Alien](https://metacpan.org/pod/Alien) had to _always_ have
 it as a prerequisite.
 
+For a working example, please see the `Makefile.PL` that comes with [Term::EditLine](https://metacpan.org/pod/Term::EditLine).
+
 # FUNCTIONS
 
 ## cc
 
-    % perl -MAlien::Base::Wrapper=Alien::Foo -e cc cflags
+    % perl -MAlien::Base::Wrapper=Alien::Foo -e cc -- cflags
 
 Invoke the C compiler with the appropriate flags from `Alien::Foo` and what
 is provided on the command line.
 
 ## ld
 
-    % perl -MAlien::Base::Wrapper=Alien::Foo -e ld ldflags
+    % perl -MAlien::Base::Wrapper=Alien::Foo -e ld -- ldflags
 
 Invoke the linker with the appropriate flags from `Alien::Foo` and what
 is provided on the command line.
