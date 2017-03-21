@@ -48,11 +48,21 @@ From Makefile.PL:
 
 **Note**: this particular module is still somewhat experimental.
 
-This module provides a command line wrapper for [Alien](https://metacpan.org/pod/Alien) modules that are
-based on [Alien::Base](https://metacpan.org/pod/Alien::Base).  The idea is to eventually use this to allow optional
-use of [Alien](https://metacpan.org/pod/Alien) modules by XS which cannot probe for a system library.
-Historically an XS module that wanted to use an [Alien](https://metacpan.org/pod/Alien) had to _always_ have
-it as a prerequisite.
+This module provides a command line wrapper for your compiler and linker that use the 
+correct flags needed for compiling and linking with [Alien](https://metacpan.org/pod/Alien) modules.  The problem that 
+this module attempts to solve is that compiler and linker flags typically need to be 
+determined at _configure_ time when a distribution is installed, meaning if you are going 
+to use an [Alien](https://metacpan.org/pod/Alien) module, then it needs to be a configure prerequisite, even if the 
+library is already installed on the operating system.  With this module, you can use this 
+wrapper as the compiler and linker commands and delay computing the compiler and linker 
+flags to the build stage, and only if necessary.
+
+The author of this module believes it to be somewhat unnecessary.  [Alien](https://metacpan.org/pod/Alien) modules based on 
+[Alien::Base](https://metacpan.org/pod/Alien::Base) have a number of prerequisites, but they well maintained and reliable, so 
+while there is a small cost in terms of extra dependencies, this is more than made up for 
+in reliability on systems where libraries that are do not typcially come with commonly used 
+open source libraries.  Operating system vendors that are packaging XS perl modules may 
+disagree.
 
 For a working example, please see the `Makefile.PL` that comes with [Term::EditLine](https://metacpan.org/pod/Term::EditLine).
 
