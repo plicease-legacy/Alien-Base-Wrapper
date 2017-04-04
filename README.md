@@ -110,6 +110,12 @@ is provided on the command line.
 Returns arguments that you can pass into `WriteMakefile` to compile/link against
 the specified Aliens.
 
+## mb\_args
+
+    my %args = Alien::Base::Wrapper->mb_args;
+
+Returns arguments that you can pass into the constructor to [Module::Build](https://metacpan.org/pod/Module::Build).
+
 # ENVIRONMENT
 
 Alien::Base::Wrapper responds to these environment variables:
