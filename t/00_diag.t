@@ -11,7 +11,8 @@ my $post_diag;
 
 $modules{$_} = $_ for qw(
   ExtUtils::MakeMaker
-  Test2::Suite
+  Test2::Bundle::Extended
+  Test2::Require::Module
   Test::Exec
   Test::More
 );

@@ -11,7 +11,7 @@ use Text::ParseWords qw( shellwords );
 
 =head1 SYNOPSIS
 
-B<NOTE>: this distribution has been ended.  L<Test::Alien> and the other modules that used to be distributed with this distribution can now be found as part of the C<Alien-Build> distribution.
+B<NOTE>: this distribution has been ended.  L<Test::Base::Wrapper> can now be found as part of the C<Alien-Build> distribution.
 
 From the command line:
 
