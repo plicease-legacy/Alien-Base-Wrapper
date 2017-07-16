@@ -4,6 +4,8 @@ Compiler and linker wrapper for Alien
 
 # SYNOPSIS
 
+**NOTE**: this distribution has been ended.  [Test::Alien](https://metacpan.org/pod/Test::Alien) and the other modules that used to be distributed with this distribution can now be found as part of the `Alien-Build` distribution.
+
 From the command line:
 
     % perl -MAlien::Base::Wrapper=Alien::Foo,Alien::Bar -e cc -- -o foo.o -c foo.c
